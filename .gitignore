@@ -8,6 +8,6 @@ __pycache__/
 .env
 .env.local
 
-# Large models (must be committed so Render can access it!)
-# *.h5
-!cnn_emotion_model.h5
+# Large models (we now use TFLite instead)
+*.h5
+convert.py
