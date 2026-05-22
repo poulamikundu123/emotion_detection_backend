@@ -8,5 +8,6 @@ __pycache__/
 .env
 .env.local
 
-# Large models
-*.h5
+# Large models (must be committed so Render can access it!)
+# *.h5
+!cnn_emotion_model.h5
