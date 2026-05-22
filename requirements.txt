@@ -1,8 +1,9 @@
 fastapi
 uvicorn
-tflite-runtime
+tensorflow
 numpy
 opencv-python-headless
 pillow
 python-multipart
+h5py
 

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import cv2
 import numpy as np
-import tflite_runtime.interpreter as tflite
+from tensorflow.keras.models import load_model
 import base64
 
 # =========================
@@ -22,12 +22,7 @@ app.add_middleware(
 # =========================
 # LOAD MODEL
 # =========================
-interpreter = tflite.Interpreter(model_path="cnn_emotion_model.tflite")
-interpreter.allocate_tensors()
-
-# Get input and output tensors
-input_details = interpreter.get_input_details()
-output_details = interpreter.get_output_details()
+model = load_model("cnn_emotion_model.h5")
 
 # Emotion labels
 emotion_labels = [
@@ -105,12 +100,10 @@ async def detect_emotion(data: dict):
             face_roi = face_roi / 255.0
 
             # Reshape
-            face_roi = np.reshape(face_roi, (1, 48, 48, 1)).astype(np.float32)
+            face_roi = np.reshape(face_roi, (1, 48, 48, 1))
 
-            # Predict using TFLite
-            interpreter.set_tensor(input_details[0]['index'], face_roi)
-            interpreter.invoke()
-            prediction = interpreter.get_tensor(output_details[0]['index'])
+            # Predict
+            prediction = model.predict(face_roi, verbose=0)
 
             # Get label
             detected_emotion = emotion_labels[np.argmax(prediction)]
